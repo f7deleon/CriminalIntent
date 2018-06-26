@@ -10,14 +10,20 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_crime.view.*
 
 class CrimeFragment() : Fragment() {
-    private  lateinit var crime : Crime
+    private lateinit var crime: Crime
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         crime = Crime()
     }
 
-    private fun initViews(view : View) {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        var view = inflater.inflate(R.layout.fragment_crime, container, false)
+        initViews(view)
+        return view
+    }
+
+    private fun initViews(view: View) {
         with(view) {
             chkSolved.setOnCheckedChangeListener { _, isChecked ->
                 crime.isSolved = isChecked
@@ -25,8 +31,7 @@ class CrimeFragment() : Fragment() {
 
             btnCrime.text = crime.date.toString()
             etxtTitle.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                        s: CharSequence?, start: Int, count: Int, after: Int) {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                     // This space intentionally left blank
                 }
 
@@ -40,11 +45,5 @@ class CrimeFragment() : Fragment() {
                 }
             })
         }
-    }
-
-    override fun onCreateView(inflater : LayoutInflater, container : ViewGroup?, savedInstanceState : Bundle?): View {
-        var view = inflater.inflate(R.layout.fragment_crime, container,false)
-        initViews(view)
-        return view
     }
 }

@@ -37,7 +37,6 @@ android {
         }
     }
 
-
 }
 
 final ANDROID_SUPPORT_VERSION = '27.1.1'
