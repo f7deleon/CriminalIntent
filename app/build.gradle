@@ -1,5 +1,6 @@
 buildscript {
     repositories {
+        jcenter()
         maven { url 'https://maven.fabric.io/public' }
     }
 
@@ -8,10 +9,8 @@ buildscript {
     }
 }
 
-repositories {
-    maven { url 'https://maven.fabric.io/public' }
-}
-
+apply plugin: "io.gitlab.arturbosch.detekt"
+apply from: '../detekt.gradle'
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
@@ -55,4 +54,3 @@ dependencies {
 
     testImplementation "junit:junit:${JUNIT_VERSION}"
 }
-

@@ -24,7 +24,6 @@ class CrimeFragment : Fragment() {
             chkSolved.setOnCheckedChangeListener { _, isChecked ->
                 crime.isSolved = isChecked
             }
-
             btnCrime.text = crime.date.toString()
             titleEditText.afterTextChangeListener {
                 crime.title = it.toString()
