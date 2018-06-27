@@ -26,21 +26,21 @@ class CrimeFragment : Fragment() {
             }
 
             btnCrime.text = crime.date.toString()
-            editTxtTitle.addTextChangedListener { s, _, _, _ ->
-                crime.title = s
+            titleEditText.afterTextChangeListener {
+                it -> crime.title = it.toString()
             }
         }
     }
 
-    private fun EditText.addTextChangedListener(after: (s: Editable) -> Unit = {},
-                                                before: (string: String, start: Int, count: Int, after: Int) -> Unit = { _, _, _, _ -> },
-                                                onTextChanged: (string: String, start: Int, count: Int, after: Int) -> Unit) =
-            addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(s: Editable) = after.invoke(s)
+    private fun EditText.afterTextChangeListener(
+            before: (string: String, start: Int, count: Int, after: Int) -> Unit = { _, _, _, _ -> },
+            onTextChanged: (string: String, start: Int, count: Int, after: Int) -> Unit = { _, _, _, _ -> },
+            afterTextChange: ((s: Editable) -> Unit)) = addTextChangedListener(object : TextWatcher {
 
-                override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) =
-                        before.invoke(s.toString(), start, count, after)
+        override fun afterTextChanged(s: Editable) = afterTextChange(s)
 
-                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) = onTextChanged(s.toString(), start, before, count)
-            })
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = before.invoke(s.toString(),start,count,after)
+
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) = onTextChanged.invoke(s.toString(),start,before,count)
+    })
 }

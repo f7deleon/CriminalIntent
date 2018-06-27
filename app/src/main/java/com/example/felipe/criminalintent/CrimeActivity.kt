@@ -13,8 +13,11 @@ class CrimeActivity : AppCompatActivity() {
 
     private fun initFragments() {
         var fragment = CrimeFragment()
-        fragment.doTransaction()
+        fragment.addFragmentToFragmentContainer()
     }
 
-    private fun Fragment.doTransaction() = supportFragmentManager.beginTransaction().add(R.id.fragmentContainer,this).commit()
+    private fun Fragment.addFragmentToFragmentContainer() = supportFragmentManager
+            .beginTransaction()
+            .add(R.id.fragmentContainer, this)
+            .commit()
 }
