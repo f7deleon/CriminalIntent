@@ -1,15 +1,8 @@
 package com.example.felipe.criminalintent
 
-import java.util.*
+import java.util.UUID
+import java.util.Date
 
-class Crime {
-    private var id: UUID
-    var date: Date
-    lateinit var title: String
-    var isSolved = false
-
-    init {
-        id = UUID.randomUUID()
-        date = Date()
-    }
+data class Crime(var date: Date = Date(), var title: String = "", var isSolved: Boolean = false) {
+    var id: UUID = UUID.randomUUID()
 }
