@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import kotlinx.android.synthetic.main.list_item_crime.view.*
 
-class CrimeAdapter(var crimes: List<Crime>, var activity: FragmentActivity?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CrimeAdapter(val crimes: List<Crime>, var activity: FragmentActivity?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(activity)
         return when (viewType) {
@@ -18,10 +18,8 @@ class CrimeAdapter(var crimes: List<Crime>, var activity: FragmentActivity?) : R
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (holder.itemViewType) {
-            ViewType.NORMAL.ordinal -> (holder as? CrimeHolder)?.bind(crimes[position])
-            ViewType.POLICE.ordinal -> (holder as? CrimeHolderPolice)?.bind(crimes[position])
-        }
+        (holder as? CrimeHolder)?.bind(crimes[position])
+        (holder as? CrimeHolderPolice)?.bind(crimes[position])
     }
 
     override fun getItemViewType(position: Int): Int = when (crimes[position].isPoliceRequire) {
@@ -47,7 +45,9 @@ class CrimeAdapter(var crimes: List<Crime>, var activity: FragmentActivity?) : R
             itemView.txtCrimeDate.text = crime.date.toString()
         }
 
-        override fun onClick(view: View) { Toast.makeText(activity, "${crime?.title} clicked!", Toast.LENGTH_SHORT).show() }
+        override fun onClick(view: View) {
+            Toast.makeText(activity, "${crime?.title} clicked!", Toast.LENGTH_SHORT).show()
+        }
 
     }
 
@@ -67,7 +67,9 @@ class CrimeAdapter(var crimes: List<Crime>, var activity: FragmentActivity?) : R
             itemView.txtCrimeDate.text = crime.date.toString()
         }
 
-        override fun onClick(view: View) { Toast.makeText(activity, "${crime?.title} clicked!", Toast.LENGTH_SHORT).show() }
+        override fun onClick(view: View) {
+            Toast.makeText(activity, "${crime?.title} clicked!", Toast.LENGTH_SHORT).show()
+        }
     }
 }
 
