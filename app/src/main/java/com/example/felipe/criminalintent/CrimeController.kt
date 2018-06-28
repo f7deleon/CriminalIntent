@@ -1,6 +1,6 @@
 package com.example.felipe.criminalintent
 
-import java.util.*
+import java.util.UUID
 
 class CrimeController private constructor() {
     companion object {

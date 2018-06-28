@@ -52,7 +52,6 @@ open class CrimeHolder(inflater: LayoutInflater, parent: ViewGroup, layout: Int,
     override fun onClick(view: View) {
         Toast.makeText(this@CrimeHolder.activity, "${crime?.title} clicked!", Toast.LENGTH_SHORT).show()
     }
-
 }
 
 private class CrimeHolderPolice(inflater: LayoutInflater, parent: ViewGroup, activity: FragmentActivity?) :
