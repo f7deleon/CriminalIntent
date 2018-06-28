@@ -1,23 +1,10 @@
 package com.example.felipe.criminalintent
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import android.os.PersistableBundle
 
-class CrimeActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_crime)
-        initFragments()
+class CrimeActivity : SingleFragmentActivity() {
+    override fun initFragments() {
+        CrimeFragment().addFragmentToFragmentContainer()
     }
-
-    private fun initFragments() {
-        var fragment = CrimeFragment()
-        fragment.addFragmentToFragmentContainer()
-    }
-
-    private fun Fragment.addFragmentToFragmentContainer() = supportFragmentManager
-            .beginTransaction()
-            .add(R.id.fragmentContainer, this)
-            .commit()
 }
