@@ -19,16 +19,8 @@ class CrimeAdapter(var crimes: List<Crime>, var activity: FragmentActivity?) : R
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
-            ViewType.NORMAL.ordinal -> {
-                holder as CrimeHolder
-                val crime = crimes[position]
-                holder.bind(crime)
-            }
-            ViewType.POLICE.ordinal -> {
-                holder as CrimeHolderPolice
-                val crime = crimes[position]
-                holder.bind(crime)
-            }
+            ViewType.NORMAL.ordinal -> (holder as? CrimeHolder)?.bind(crimes[position])
+            ViewType.POLICE.ordinal -> (holder as? CrimeHolderPolice)?.bind(crimes[position])
         }
     }
 
@@ -55,9 +47,7 @@ class CrimeAdapter(var crimes: List<Crime>, var activity: FragmentActivity?) : R
             itemView.txtCrimeDate.text = crime.date.toString()
         }
 
-        override fun onClick(view: View) {
-            Toast.makeText(activity, "${crime?.title} clicked!", Toast.LENGTH_SHORT).show()
-        }
+        override fun onClick(view: View) { Toast.makeText(activity, "${crime?.title} clicked!", Toast.LENGTH_SHORT).show() }
 
     }
 
@@ -77,13 +67,10 @@ class CrimeAdapter(var crimes: List<Crime>, var activity: FragmentActivity?) : R
             itemView.txtCrimeDate.text = crime.date.toString()
         }
 
-        override fun onClick(view: View) {
-            Toast.makeText(activity, "${crime?.title} clicked!", Toast.LENGTH_SHORT).show()
-        }
-
+        override fun onClick(view: View) { Toast.makeText(activity, "${crime?.title} clicked!", Toast.LENGTH_SHORT).show() }
     }
 }
 
-enum class ViewType {
+private enum class ViewType {
     NORMAL, POLICE
 }
