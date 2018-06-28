@@ -15,7 +15,9 @@
         android:theme="@style/AppTheme"
         >
 
-        <activity android:name=".CrimeActivity">
+        <activity android:name=".CrimeActivity" />
+
+        <activity android:name=".CrimeListActivity">
 
             <intent-filter>
 
@@ -33,6 +35,5 @@
             />
 
     </application>
-
 
 </manifest>
