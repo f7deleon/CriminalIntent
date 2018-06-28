@@ -2,7 +2,13 @@ package com.example.felipe.criminalintent
 
 import java.util.*
 
-class CrimeController {
+class CrimeController private constructor() {
+    companion object {
+        private val INSTANCE = CrimeController()
+
+        fun getInstance() = INSTANCE
+    }
+
     private val listOfCrime = mutableListOf<Crime>()
 
     init {
@@ -11,28 +17,11 @@ class CrimeController {
         }
     }
 
-    class SingletonClass private constructor() {
-        companion object {
-            private val INSTANCE = CrimeController()
+    public fun add(crime: Crime) = listOfCrime.add(crime)
 
-            fun getInstance() = INSTANCE
-        }
-    }
-
-    public fun add(crime: Crime) {
-        listOfCrime.add(crime)
-    }
-
-    public fun remove(crime: Crime) {
-        listOfCrime.remove(crime)
-    }
+    public fun remove(crime: Crime) = listOfCrime.remove(crime)
 
     public fun listCrimes() = listOfCrime.toList()
 
-    public fun getCrime(id: UUID): Crime? {
-        for (i in listOfCrime) {
-            if (i.id == id) return i
-        }
-        return null
-    }
+    public fun getCrime(id: UUID): Crime? = listOfCrime.first { it.id == id }
 }
