@@ -13,7 +13,9 @@ class CrimeController private constructor() {
 
     init {
         for (i in 1..50) {
-            this.add(Crime(title = "Crime $i", isPoliceRequire = (i % 10) == 5))
+            this.add(Crime(title = "Crime $i",
+                    isSolved = (i % 10) == 5,
+                    isPoliceRequire = (i % 9) == 0))
         }
     }
 
