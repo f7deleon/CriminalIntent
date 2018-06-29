@@ -19,11 +19,13 @@ class CrimeController private constructor() {
         }
     }
 
-    public fun add(crime: Crime) = listOfCrime.add(crime)
+    fun add(crime: Crime) = listOfCrime.add(crime)
 
-    public fun remove(crime: Crime) = listOfCrime.remove(crime)
+    fun remove(crime: Crime) = listOfCrime.remove(crime)
 
-    public fun listCrimes() = listOfCrime.toList()
+    fun listCrimes() = listOfCrime.toList()
 
-    public fun getCrime(id: UUID): Crime? = listOfCrime.first { it.id == id }
+    fun getCrime(id: UUID): Crime? = listOfCrime.first { it.id == id }
+
+    fun getIndex(id: UUID?) = listOfCrime.indexOfFirst { it.id == id}
 }

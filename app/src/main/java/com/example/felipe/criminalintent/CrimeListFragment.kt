@@ -1,5 +1,7 @@
 package com.example.felipe.criminalintent
 
+import android.app.Activity
+import android.content.Intent
 import android.support.v4.app.Fragment
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -7,19 +9,41 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_crime_list.view.*
-
+import java.util.UUID
 
 class CrimeListFragment : Fragment() {
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    companion object {
+        const val REQUEST_CRIME = 0
+    }
+    private var _view : View? = null
+    private var adapter : CrimeAdapter? = null
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        val view = inflater.inflate(R.layout.fragment_crime_list, container, false)
-        initializateCrimeList(view)
-        return view
+        _view = inflater.inflate(R.layout.fragment_crime_list, container, false)
+        updateUI()
+        return _view
     }
 
-    private fun initializateCrimeList(view: View) {
-        view.recycleViewCrimes.layoutManager = LinearLayoutManager(activity)
-        val crimeController = CrimeController.getInstance()
-        view.recycleViewCrimes.adapter = CrimeAdapter(crimeController.listCrimes(), activity)
+    override fun onResume() {
+        super.onResume()
+        updateUI()
+    }
+
+    private fun updateUI() {
+        if(view?.recycleViewCrimes?.adapter == null) {
+            _view?.recycleViewCrimes?.layoutManager = LinearLayoutManager(activity)
+            val crimeController = CrimeController.getInstance()
+            adapter = CrimeAdapter(crimeController.listCrimes(), activity)
+            _view?.recycleViewCrimes?.adapter = adapter
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode != Activity.RESULT_OK) return
+        if(requestCode == REQUEST_CRIME ){
+            val id = data?.getSerializableExtra(CrimeActivity.EXTRA_CRIME_ID) as UUID
+            adapter?.notifyItemChangedByID(id)
+        }
     }
 }

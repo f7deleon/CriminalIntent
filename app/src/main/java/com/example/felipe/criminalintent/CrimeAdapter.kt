@@ -5,8 +5,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import kotlinx.android.synthetic.main.list_item_crime.view.*
+import java.util.UUID
 
 class CrimeAdapter(val crimes: List<Crime>, var activity: FragmentActivity?) : RecyclerView.Adapter<CrimeHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CrimeHolder {
@@ -19,9 +19,13 @@ class CrimeAdapter(val crimes: List<Crime>, var activity: FragmentActivity?) : R
     }
 
     override fun getItemCount() = crimes.size
+
+    fun notifyItemChangedByID(index : UUID?){
+        this.notifyItemChanged(CrimeController.getInstance().getIndex(index))
+    }
 }
 
-open class CrimeHolder(inflater: LayoutInflater, parent: ViewGroup, layout: Int, var activity: FragmentActivity?) :
+open class CrimeHolder(inflater: LayoutInflater, parent: ViewGroup, layout: Int, val activity: FragmentActivity?) :
         RecyclerView.ViewHolder(inflater.inflate(layout, parent, false)),
         View.OnClickListener {
     private var crime: Crime? = null
@@ -39,6 +43,7 @@ open class CrimeHolder(inflater: LayoutInflater, parent: ViewGroup, layout: Int,
     }
 
     override fun onClick(view: View) {
-        Toast.makeText(this@CrimeHolder.activity, "${crime?.title} clicked!", Toast.LENGTH_SHORT).show()
+        val intent = CrimeActivity.newIntent(activity, crime?.id)
+        activity?.startActivityForResult(intent,CrimeListFragment.REQUEST_CRIME)
     }
 }
