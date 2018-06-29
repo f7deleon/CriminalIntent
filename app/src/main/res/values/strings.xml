@@ -4,5 +4,12 @@
     <string name="title">Title</string>
     <string name="detail">Details</string>
     <string name="solved">Solved</string>
-    <string name="police_is_required">POLICE IS REQUIRED!!!!!</string>
+    <string name="police_required">Police required</string>
+    <string name="first">First</string>
+    <string name="last">Last</string>
+    <string name="date_of_crime">Date of crime:</string>
+    <string name="new_crime">New Crime</string>
+    <string name="show_subtitle">Show Subtitle</string>
+    <string name="hide_subtitle">Hide Subtitle</string>
+    <string name="subtitle_format">%1$d crimes</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.felipe.criminalintent
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.text.Editable
@@ -9,26 +10,87 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import kotlinx.android.synthetic.main.fragment_crime.view.*
+import android.app.Activity
+import kotlinx.android.synthetic.main.fragment_crime.*
+import java.util.*
+
 
 class CrimeFragment : Fragment() {
-    private var crime = Crime()
+    companion object {
+        const val ARG_CRIME_ID = "crime_id"
+        const val TAG_DATEPICKER = "crime_date_picker"
+        const val REQUEST_DATE = 0
+        val EXTRA_CRIME_ID = "${CrimeFragment::class.java.canonicalName}.crime_id"
+
+        fun newInstance(crimeId: UUID?, onCrimeUpdated: ((Crime) -> Unit) = {} ) : CrimeFragment  {
+            val bundle = Bundle()
+            bundle.putSerializable(ARG_CRIME_ID, crimeId)
+            val fragment = CrimeFragment()
+            fragment.arguments = bundle
+            fragment.onCrimeUpdated = onCrimeUpdated
+            return fragment
+        }
+    }
+
+    private var crime: Crime? = null
+
+    private var onCrimeUpdated: ((Crime) -> Unit) = {}
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val crimeId = arguments?.getSerializable(ARG_CRIME_ID) as? UUID
+        crime = CrimeController.getInstance().getCrime(crimeId ?: UUID.randomUUID()) ?: Crime()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        var view = inflater.inflate(R.layout.fragment_crime, container, false)
+        val view = inflater.inflate(R.layout.fragment_crime, container, false)
         initViews(view)
         return view
     }
 
     private fun initViews(view: View) {
         with(view) {
+            chkSolved.isChecked = crime?.isSolved ?: false
+            chkPoliceRequired.isChecked = crime?.isPoliceRequire ?: false
+            titleEditText.setText(crime?.title)
+            btnCrime.text = crime?.date.toString()
             chkSolved.setOnCheckedChangeListener { _, isChecked ->
-                crime.isSolved = isChecked
+                crime?.isSolved = isChecked
+                crime?.let { onCrimeUpdated.invoke(it) }
             }
-            btnCrime.text = crime.date.toString()
+            chkPoliceRequired.setOnCheckedChangeListener { _, isChecked ->
+                crime?.isPoliceRequire = isChecked
+                crime?.let { onCrimeUpdated.invoke(it) }
+            }
             titleEditText.afterTextChangeListener {
-                crime.title = it.toString()
+                crime?.title = it.toString()
+                crime?.let { onCrimeUpdated.invoke(it) }
+            }
+            btnCrime.setOnClickListener {
+                val dialog = DatePickerFragment.newInstance(crime?.date)
+                dialog.setTargetFragment(this@CrimeFragment, REQUEST_DATE)
+                dialog.show(fragmentManager, TAG_DATEPICKER)
             }
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode != Activity.RESULT_OK) {
+            return
+        }
+        if (requestCode == REQUEST_DATE) {
+            val date = data!!
+                    .getSerializableExtra(DatePickerFragment.EXTRA_DATE) as Date
+            crime?.date = date
+            btnCrime.text = crime?.date.toString()
+            crime?.let { onCrimeUpdated.invoke(it) }
+        }
+    }
+
+    fun onKeyDown() {
+        val intent = Intent()
+        intent.putExtra(EXTRA_CRIME_ID, crime?.id.toString())
+        activity?.finishActivityWithResult(intent)
     }
 
     private fun EditText.afterTextChangeListener(

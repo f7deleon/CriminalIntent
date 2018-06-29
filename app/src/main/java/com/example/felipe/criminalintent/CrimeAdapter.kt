@@ -1,42 +1,40 @@
 package com.example.felipe.criminalintent
 
-import android.support.v4.app.FragmentActivity
+import android.support.annotation.MainThread
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import kotlinx.android.synthetic.main.list_item_crime.view.*
+import java.util.UUID
 
-class CrimeAdapter(val crimes: List<Crime>, var activity: FragmentActivity?) : RecyclerView.Adapter<CrimeHolder>() {
+class CrimeAdapter(crimes: List<Crime>, private val callback: (Crime) -> Unit) : RecyclerView.Adapter<CrimeHolder>() {
+    private val crimes = ArrayList<Crime>(crimes)
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CrimeHolder {
-        val layoutInflater = LayoutInflater.from(activity)
-        return when (viewType) {
-            ViewType.POLICE.ordinal -> CrimeHolderPolice(layoutInflater, parent, activity)
-            else -> CrimeHolderNormal(layoutInflater, parent, activity)
-        }
+       val layoutInflater = LayoutInflater.from(parent.context)
+       return CrimeHolder(layoutInflater, parent, layout = R.layout.list_item_crime, callback = callback)
     }
 
     override fun onBindViewHolder(holder: CrimeHolder, position: Int) {
         holder.bind(crimes[position])
     }
 
-    override fun getItemViewType(position: Int): Int = when (crimes[position].isPoliceRequire) {
-        true -> ViewType.POLICE.ordinal
-        false -> ViewType.NORMAL.ordinal
+    override fun getItemCount() = crimes.size
+
+    @MainThread
+    fun notifyItemChangedByID(ids: List<String>) {
+        ids.asSequence().forEach {
+            notifyItemChanged(getCrimeIndex(it))
+        }
     }
 
-    override fun getItemCount() = crimes.size
+    private fun getCrimeIndex(str :String): Int = crimes.indexOfFirst{ it.id == UUID.fromString(str)}
 }
 
-private enum class ViewType {
-    NORMAL, POLICE
-}
-
-open class CrimeHolder(inflater: LayoutInflater, parent: ViewGroup, layout: Int, var activity: FragmentActivity?) :
+class CrimeHolder(inflater: LayoutInflater, parent: ViewGroup, layout: Int, private val callback: (Crime) -> Unit) :
         RecyclerView.ViewHolder(inflater.inflate(layout, parent, false)),
         View.OnClickListener {
-
     private var crime: Crime? = null
 
     init {
@@ -47,15 +45,9 @@ open class CrimeHolder(inflater: LayoutInflater, parent: ViewGroup, layout: Int,
         this.crime = crime
         itemView.txtCrimeTitle.text = crime.title
         itemView.txtCrimeDate.text = crime.date.toString()
+        if (crime.isSolved) itemView.imgSolvedCrime.visibility = View.VISIBLE
+        if (crime.isPoliceRequire) itemView.imgPoliceRequired.visibility = View.VISIBLE
     }
 
-    override fun onClick(view: View) {
-        Toast.makeText(this@CrimeHolder.activity, "${crime?.title} clicked!", Toast.LENGTH_SHORT).show()
-    }
+    override fun onClick(view: View) = crime?.let { callback.invoke(it) } ?: Unit
 }
-
-private class CrimeHolderPolice(inflater: LayoutInflater, parent: ViewGroup, activity: FragmentActivity?) :
-        CrimeHolder(inflater, parent, R.layout.list_item_crime_police, activity)
-
-private class CrimeHolderNormal(inflater: LayoutInflater, parent: ViewGroup, activity: FragmentActivity?) :
-        CrimeHolder(inflater, parent, R.layout.list_item_crime, activity)
