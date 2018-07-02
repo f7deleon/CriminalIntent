@@ -4,6 +4,12 @@ import java.util.UUID
 
 class CrimeController private constructor() {
     companion object {
+        const val BEGINING = 1
+        const val END = 50
+        const val IS_SOLVED_MOD = 10
+        const val IS_SOLVED_EQUAL = 5
+        const val IS_POLICE_MOD = 9
+        const val IS_POLICE_EQUAL = 0
         private val INSTANCE = CrimeController()
 
         fun getInstance() = INSTANCE
@@ -12,18 +18,18 @@ class CrimeController private constructor() {
     private val listOfCrime = mutableListOf<Crime>()
 
     init {
-        for (i in 1..50) {
+        for (i in BEGINING..END) {
             this.add(Crime(title = "Crime $i",
-                    isSolved = (i % 10) == 5,
-                    isPoliceRequire = (i % 9) == 0))
+                    isSolved = (i % IS_SOLVED_MOD) == IS_SOLVED_EQUAL,
+                    isPoliceRequire = (i % IS_POLICE_MOD) == IS_POLICE_EQUAL))
         }
     }
 
-    public fun add(crime: Crime) = listOfCrime.add(crime)
+    fun add(crime: Crime) = listOfCrime.add(crime)
 
-    public fun remove(crime: Crime) = listOfCrime.remove(crime)
+    fun remove(crime: Crime) = listOfCrime.remove(crime)
 
-    public fun listCrimes() = listOfCrime.toList()
+    fun listCrimes() = listOfCrime.toList()
 
-    public fun getCrime(id: UUID): Crime? = listOfCrime.first { it.id == id }
+    fun getCrime(id: UUID): Crime? = listOfCrime.first { it.id == id }
 }

@@ -1,17 +1,18 @@
 package com.example.felipe.criminalintent
 
-import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import kotlinx.android.synthetic.main.list_item_crime.view.*
+import java.util.UUID
 
-class CrimeAdapter(val crimes: List<Crime>, var activity: FragmentActivity?) : RecyclerView.Adapter<CrimeHolder>() {
+class CrimeAdapter(crimes: List<Crime>, private val callback: (Crime) -> Unit) : RecyclerView.Adapter<CrimeHolder>() {
+    private val crimes = ArrayList<Crime>(crimes)
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CrimeHolder {
-        val layoutInflater = LayoutInflater.from(activity)
-        return CrimeHolder(layoutInflater, parent, activity = activity, layout = R.layout.list_item_crime)
+       val layoutInflater = LayoutInflater.from(parent.context)
+       return CrimeHolder(layoutInflater, parent, layout = R.layout.list_item_crime, callback = callback)
     }
 
     override fun onBindViewHolder(holder: CrimeHolder, position: Int) {
@@ -19,9 +20,11 @@ class CrimeAdapter(val crimes: List<Crime>, var activity: FragmentActivity?) : R
     }
 
     override fun getItemCount() = crimes.size
+
+    fun notifyItemChangedByID(index: UUID) = notifyItemChanged(crimes.indexOfFirst { it.id == index })
 }
 
-open class CrimeHolder(inflater: LayoutInflater, parent: ViewGroup, layout: Int, var activity: FragmentActivity?) :
+class CrimeHolder(inflater: LayoutInflater, parent: ViewGroup, layout: Int, private val callback: (Crime) -> Unit) :
         RecyclerView.ViewHolder(inflater.inflate(layout, parent, false)),
         View.OnClickListener {
     private var crime: Crime? = null
@@ -38,7 +41,5 @@ open class CrimeHolder(inflater: LayoutInflater, parent: ViewGroup, layout: Int,
         if (crime.isPoliceRequire) itemView.imgPoliceRequired.visibility = View.VISIBLE
     }
 
-    override fun onClick(view: View) {
-        Toast.makeText(this@CrimeHolder.activity, "${crime?.title} clicked!", Toast.LENGTH_SHORT).show()
-    }
+    override fun onClick(view: View) = crime?.let { callback.invoke(it) } ?: Unit
 }
