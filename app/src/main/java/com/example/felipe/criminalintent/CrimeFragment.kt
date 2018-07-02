@@ -19,20 +19,20 @@ class CrimeFragment : Fragment() {
         val EXTRA_CRIME_ID = "${CrimeFragment::class.java.canonicalName}.crime_id"
 
         fun newInstance(crimeId: UUID): CrimeFragment {
-            val args = Bundle()
-            args.putSerializable(ARG_CRIME_ID, crimeId)
+            val bundle = Bundle()
+            bundle.putSerializable(ARG_CRIME_ID, crimeId)
             val fragment = CrimeFragment()
-            fragment.arguments = args
+            fragment.arguments = bundle
             return fragment
         }
     }
 
-    private var crime = Crime()
+    private var crime : Crime? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val crimeId = arguments?.getSerializable(ARG_CRIME_ID) as UUID
-        crime = CrimeController.getInstance().getCrime(crimeId) ?: crime
+        crime = CrimeController.getInstance().getCrime(crimeId) ?: Crime()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -43,27 +43,26 @@ class CrimeFragment : Fragment() {
 
     private fun initViews(view: View) {
         with(view) {
-            chkSolved.isChecked = crime.isSolved
-            chkPoliceRequired.isChecked = crime.isPoliceRequire
-            titleEditText.setText(crime.title)
-            btnCrime.text = crime.date.toString()
+            chkSolved.isChecked = crime?.isSolved?:false
+            chkPoliceRequired.isChecked = crime?.isPoliceRequire?:false
+            titleEditText.setText(crime?.title)
+            btnCrime.text = crime?.date.toString()
             chkSolved.setOnCheckedChangeListener { _, isChecked ->
-                crime.isSolved = isChecked
+                crime?.isSolved = isChecked
             }
             chkPoliceRequired.setOnCheckedChangeListener { _, isChecked ->
-                crime.isPoliceRequire = isChecked
+                crime?.isPoliceRequire = isChecked
             }
             titleEditText.afterTextChangeListener {
-                crime.title = it.toString()
+                crime?.title = it.toString()
             }
         }
     }
 
     fun onKeyDown() {
         val intent = Intent()
-        intent.putExtra(EXTRA_CRIME_ID, crime.id.toString())
-        activity?.setResult(Activity.RESULT_OK, intent)
-        activity?.finish()
+        intent.putExtra(EXTRA_CRIME_ID, crime?.id.toString())
+        activity?.finishActivityWithResult(intent)
     }
 
     private fun EditText.afterTextChangeListener(

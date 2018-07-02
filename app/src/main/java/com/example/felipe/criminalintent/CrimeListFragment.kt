@@ -13,17 +13,15 @@ import java.util.UUID
 
 class CrimeListFragment : Fragment() {
     companion object {
-        const val REQUEST_CRIME = 1
+        const val ID_EDITED_CRIME = 1
     }
 
-    private var _view: View? = null
     private var adapter: CrimeAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        _view = inflater.inflate(R.layout.fragment_crime_list, container, false)
-        updateUI()
-        return _view
+        val view = inflater.inflate(R.layout.fragment_crime_list, container, false)
+        return view
     }
 
     override fun onResume() {
@@ -33,19 +31,19 @@ class CrimeListFragment : Fragment() {
 
     private fun updateUI() {
         if (view?.recycleViewCrimes?.adapter == null) {
-            _view?.recycleViewCrimes?.layoutManager = LinearLayoutManager(activity)
+            view?.recycleViewCrimes?.layoutManager = LinearLayoutManager(activity)
             val crimeController = CrimeController.getInstance()
             adapter = CrimeAdapter(crimeController.listCrimes()) {
                 val intent = CrimeActivity.newIntent(activity, it.id)
-                startActivityForResult(intent, REQUEST_CRIME)
+                startActivityForResult(intent, ID_EDITED_CRIME)
             }
-            _view?.recycleViewCrimes?.adapter = adapter
+            view?.recycleViewCrimes?.adapter = adapter
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode != Activity.RESULT_OK) return
-        if (requestCode == REQUEST_CRIME) {
+        if (requestCode == ID_EDITED_CRIME) {
             val id = data?.getStringExtra(CrimeFragment.EXTRA_CRIME_ID)
             val idu = UUID.fromString(id)
             adapter?.notifyItemChangedByID(idu)

@@ -1,9 +1,5 @@
 package com.example.felipe.criminalintent
 
-import android.os.Bundle
-import android.os.ProxyFileDescriptorCallback
-import android.support.v4.app.ActivityCompat.startActivityForResult
-import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -24,7 +20,7 @@ class CrimeAdapter(val crimes: List<Crime>, private val callback: (Crime) -> Uni
     override fun getItemCount() = crimes.size
 
     fun notifyItemChangedByID(index: UUID?) {
-        this.notifyItemChanged(CrimeController.getInstance().getIndex(index))
+        this.notifyItemChanged(crimes.indexOfFirst { it.id == index })
     }
 }
 

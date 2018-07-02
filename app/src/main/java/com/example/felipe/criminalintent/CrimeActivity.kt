@@ -10,9 +10,8 @@ class CrimeActivity : SingleFragmentActivity() {
     companion object {
         val EXTRA_CRIME_ID = "${CrimeActivity::class.java.canonicalName}.crime_id"
         fun newIntent(activity: Activity?, id: UUID?): Intent {
-            val intent = Intent(activity, CrimeActivity::class.java)
-            intent.putExtra(EXTRA_CRIME_ID, id)
-            return intent
+            return Intent(activity, CrimeActivity::class.java)
+                    .putExtra(EXTRA_CRIME_ID, id)
         }
     }
 
