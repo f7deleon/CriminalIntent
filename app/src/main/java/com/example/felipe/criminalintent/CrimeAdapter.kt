@@ -7,10 +7,12 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.list_item_crime.view.*
 import java.util.UUID
 
-class CrimeAdapter(val crimes: List<Crime>, private val callback: (Crime) -> Unit) : RecyclerView.Adapter<CrimeHolder>() {
+class CrimeAdapter(crimes: List<Crime>, private val callback: (Crime) -> Unit) : RecyclerView.Adapter<CrimeHolder>() {
+    private val crimes = ArrayList<Crime>(crimes)
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CrimeHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        return CrimeHolder(layoutInflater, parent, layout = R.layout.list_item_crime, callback = callback)
+       val layoutInflater = LayoutInflater.from(parent.context)
+       return CrimeHolder(layoutInflater, parent, layout = R.layout.list_item_crime, callback = callback)
     }
 
     override fun onBindViewHolder(holder: CrimeHolder, position: Int) {
@@ -19,9 +21,7 @@ class CrimeAdapter(val crimes: List<Crime>, private val callback: (Crime) -> Uni
 
     override fun getItemCount() = crimes.size
 
-    fun notifyItemChangedByID(index: UUID?) {
-        this.notifyItemChanged(crimes.indexOfFirst { it.id == index })
-    }
+    fun notifyItemChangedByID(index: UUID) = notifyItemChanged(crimes.indexOfFirst { it.id == index })
 }
 
 class CrimeHolder(inflater: LayoutInflater, parent: ViewGroup, layout: Int, private val callback: (Crime) -> Unit) :

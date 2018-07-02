@@ -31,8 +31,8 @@ class CrimeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val crimeId = arguments?.getSerializable(ARG_CRIME_ID) as UUID
-        crime = CrimeController.getInstance().getCrime(crimeId) ?: Crime()
+        val crimeId = arguments?.getSerializable(ARG_CRIME_ID) as? UUID
+        crime = CrimeController.getInstance().getCrime(crimeId?:UUID.randomUUID()) ?: Crime()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

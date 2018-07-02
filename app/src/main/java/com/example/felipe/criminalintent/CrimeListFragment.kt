@@ -13,7 +13,7 @@ import java.util.UUID
 
 class CrimeListFragment : Fragment() {
     companion object {
-        const val ID_EDITED_CRIME = 1
+        const val EDIT_CRIME_REQUEST_CODE = 1
     }
 
     private var adapter: CrimeAdapter? = null
@@ -35,7 +35,7 @@ class CrimeListFragment : Fragment() {
             val crimeController = CrimeController.getInstance()
             adapter = CrimeAdapter(crimeController.listCrimes()) {
                 val intent = CrimeActivity.newIntent(activity, it.id)
-                startActivityForResult(intent, ID_EDITED_CRIME)
+                startActivityForResult(intent, EDIT_CRIME_REQUEST_CODE)
             }
             view?.recycleViewCrimes?.adapter = adapter
         }
@@ -43,7 +43,7 @@ class CrimeListFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode != Activity.RESULT_OK) return
-        if (requestCode == ID_EDITED_CRIME) {
+        if (requestCode == EDIT_CRIME_REQUEST_CODE) {
             val id = data?.getStringExtra(CrimeFragment.EXTRA_CRIME_ID)
             val idu = UUID.fromString(id)
             adapter?.notifyItemChangedByID(idu)
