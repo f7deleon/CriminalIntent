@@ -18,21 +18,24 @@ class CrimeFragment : Fragment() {
         const val ARG_CRIME_ID = "crime_id"
         val EXTRA_CRIME_ID = "${CrimeFragment::class.java.canonicalName}.crime_id"
 
-        fun newInstance(crimeId: UUID): CrimeFragment {
+        fun newInstance(crimeId: UUID, onCrimeUpdated: (Crime) -> Unit): CrimeFragment {
             val bundle = Bundle()
             bundle.putSerializable(ARG_CRIME_ID, crimeId)
             val fragment = CrimeFragment()
             fragment.arguments = bundle
+            fragment.onCrimeUpdated = onCrimeUpdated
             return fragment
         }
     }
 
-    private var crime : Crime? = null
+    private var crime: Crime? = null
+
+    private var onCrimeUpdated: ((Crime) -> Unit) = {}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val crimeId = arguments?.getSerializable(ARG_CRIME_ID) as? UUID
-        crime = CrimeController.getInstance().getCrime(crimeId?:UUID.randomUUID()) ?: Crime()
+        crime = CrimeController.getInstance().getCrime(crimeId ?: UUID.randomUUID()) ?: Crime()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -43,18 +46,21 @@ class CrimeFragment : Fragment() {
 
     private fun initViews(view: View) {
         with(view) {
-            chkSolved.isChecked = crime?.isSolved?:false
-            chkPoliceRequired.isChecked = crime?.isPoliceRequire?:false
+            chkSolved.isChecked = crime?.isSolved ?: false
+            chkPoliceRequired.isChecked = crime?.isPoliceRequire ?: false
             titleEditText.setText(crime?.title)
             btnCrime.text = crime?.date.toString()
             chkSolved.setOnCheckedChangeListener { _, isChecked ->
                 crime?.isSolved = isChecked
+                onCrimeUpdated.invoke(crime ?: Crime())
             }
             chkPoliceRequired.setOnCheckedChangeListener { _, isChecked ->
                 crime?.isPoliceRequire = isChecked
+                onCrimeUpdated.invoke(crime ?: Crime())
             }
             titleEditText.afterTextChangeListener {
                 crime?.title = it.toString()
+                onCrimeUpdated.invoke(crime ?: Crime())
             }
         }
     }

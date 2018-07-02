@@ -2,7 +2,6 @@ package com.example.felipe.criminalintent
 
 import android.app.Activity
 import android.content.Intent
-import android.support.v4.app.Fragment
 import android.view.KeyEvent
 import java.util.UUID
 
@@ -18,7 +17,7 @@ class CrimeActivity : SingleFragmentActivity() {
     private var fragment: CrimeFragment? = null
     override fun initFragments() {
         val crimeId = intent.getSerializableExtra(EXTRA_CRIME_ID) as? UUID
-        fragment = CrimeFragment.newInstance(crimeId?:UUID.randomUUID())
+        fragment = CrimeFragment.newInstance(crimeId ?: UUID.randomUUID(), {})
         fragment?.addFragmentToFragmentContainer()
     }
 

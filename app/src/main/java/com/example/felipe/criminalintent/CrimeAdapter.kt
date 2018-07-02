@@ -21,7 +21,13 @@ class CrimeAdapter(crimes: List<Crime>, private val callback: (Crime) -> Unit) :
 
     override fun getItemCount() = crimes.size
 
-    fun notifyItemChangedByID(index: UUID) = notifyItemChanged(crimes.indexOfFirst { it.id == index })
+    fun notifyItemChangedByID(ids: ArrayList<String>) {
+        ids.asSequence().forEach {
+            notifyItemChanged(crimeIDStringToIndex(it))
+        }
+    }
+
+    fun crimeIDStringToIndex(str :String): Int =crimes.indexOfFirst{ it.id == UUID.fromString(str)}
 }
 
 class CrimeHolder(inflater: LayoutInflater, parent: ViewGroup, layout: Int, private val callback: (Crime) -> Unit) :

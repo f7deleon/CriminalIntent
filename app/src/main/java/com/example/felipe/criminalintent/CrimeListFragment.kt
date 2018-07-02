@@ -1,6 +1,7 @@
 package com.example.felipe.criminalintent
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.support.v4.app.Fragment
 import android.os.Bundle
@@ -34,7 +35,7 @@ class CrimeListFragment : Fragment() {
             view?.recycleViewCrimes?.layoutManager = LinearLayoutManager(activity)
             val crimeController = CrimeController.getInstance()
             adapter = CrimeAdapter(crimeController.listCrimes()) {
-                val intent = CrimeActivity.newIntent(activity, it.id)
+                val intent = CrimePagerActivity.newIntent(activity as Context, it.id)
                 startActivityForResult(intent, EDIT_CRIME_REQUEST_CODE)
             }
             view?.recycleViewCrimes?.adapter = adapter
@@ -44,9 +45,8 @@ class CrimeListFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode != Activity.RESULT_OK) return
         if (requestCode == EDIT_CRIME_REQUEST_CODE) {
-            val id = data?.getStringExtra(CrimeFragment.EXTRA_CRIME_ID)
-            val idu = UUID.fromString(id)
-            adapter?.notifyItemChangedByID(idu)
+            val ids = data?.getStringArrayListExtra(CrimeFragment.EXTRA_CRIME_ID)
+            adapter?.notifyItemChangedByID(ids ?: ArrayList())
         }
     }
 }
