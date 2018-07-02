@@ -2,6 +2,8 @@ package com.example.felipe.criminalintent
 
 import android.app.Activity
 import android.content.Intent
+import android.support.v4.app.Fragment
+import android.view.KeyEvent
 import java.util.UUID
 
 class CrimeActivity : SingleFragmentActivity() {
@@ -14,8 +16,19 @@ class CrimeActivity : SingleFragmentActivity() {
         }
     }
 
+    private var fragment: CrimeFragment? = null
     override fun initFragments() {
         val crimeId = intent.getSerializableExtra(EXTRA_CRIME_ID) as UUID
-        CrimeFragment().newInstance(crimeId).addFragmentToFragmentContainer()
+        fragment = CrimeFragment.newInstance(crimeId)
+        fragment?.addFragmentToFragmentContainer()
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        return if (keyCode == KeyEvent.KEYCODE_BACK) {
+            fragment?.onKeyDown()
+            true
+        } else {
+            super.onKeyDown(keyCode, event)
+        }
     }
 }

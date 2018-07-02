@@ -17,6 +17,14 @@ class CrimeFragment : Fragment() {
     companion object {
         const val ARG_CRIME_ID = "crime_id"
         val EXTRA_CRIME_ID = "${CrimeFragment::class.java.canonicalName}.crime_id"
+
+        fun newInstance(crimeId: UUID): CrimeFragment {
+            val args = Bundle()
+            args.putSerializable(ARG_CRIME_ID, crimeId)
+            val fragment = CrimeFragment()
+            fragment.arguments = args
+            return fragment
+        }
     }
 
     private var crime = Crime()
@@ -28,17 +36,9 @@ class CrimeFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        var view = inflater.inflate(R.layout.fragment_crime, container, false)
+        val view = inflater.inflate(R.layout.fragment_crime, container, false)
         initViews(view)
         return view
-    }
-
-    fun newInstance(crimeId: UUID) : CrimeFragment {
-        val args = Bundle()
-        args.putSerializable(ARG_CRIME_ID, crimeId)
-        val fragment = CrimeFragment()
-        fragment.arguments = args
-        return fragment
     }
 
     private fun initViews(view: View) {
@@ -49,23 +49,21 @@ class CrimeFragment : Fragment() {
             btnCrime.text = crime.date.toString()
             chkSolved.setOnCheckedChangeListener { _, isChecked ->
                 crime.isSolved = isChecked
-                returnResult()
             }
             chkPoliceRequired.setOnCheckedChangeListener { _, isChecked ->
                 crime.isPoliceRequire = isChecked
-                returnResult()
             }
             titleEditText.afterTextChangeListener {
                 crime.title = it.toString()
-                returnResult()
             }
         }
     }
 
-    private fun returnResult(){
+    fun onKeyDown() {
         val intent = Intent()
-        intent.putExtra(EXTRA_CRIME_ID,crime.id)
+        intent.putExtra(EXTRA_CRIME_ID, crime.id.toString())
         activity?.setResult(Activity.RESULT_OK, intent)
+        activity?.finish()
     }
 
     private fun EditText.afterTextChangeListener(
