@@ -25,11 +25,11 @@ class CrimeAdapter(crimes: List<Crime>, private val callback: (Crime) -> Unit) :
     @MainThread
     fun notifyItemChangedByID(ids: ArrayList<String>) {
         ids.asSequence().forEach {
-            notifyItemChanged(crimeIDStringToIndex(it))
+            notifyItemChanged(getCrimeIndex(it))
         }
     }
 
-    fun crimeIDStringToIndex(str :String): Int = crimes.indexOfFirst{ it.id == UUID.fromString(str)}
+    private fun getCrimeIndex(str :String): Int = crimes.indexOfFirst{ it.id == UUID.fromString(str)}
 }
 
 class CrimeHolder(inflater: LayoutInflater, parent: ViewGroup, layout: Int, private val callback: (Crime) -> Unit) :
