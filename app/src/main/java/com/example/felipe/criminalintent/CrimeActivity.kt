@@ -17,7 +17,7 @@ class CrimeActivity : SingleFragmentActivity() {
     private var fragment: CrimeFragment? = null
     override fun initFragments() {
         val crimeId = intent.getSerializableExtra(EXTRA_CRIME_ID) as? UUID
-        fragment = CrimeFragment.newInstance(crimeId , {})
+        fragment = CrimeFragment.newInstance(crimeId)
         fragment?.addFragmentToFragmentContainer()
     }
 

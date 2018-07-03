@@ -18,7 +18,7 @@ class CrimeFragment : Fragment() {
         const val ARG_CRIME_ID = "crime_id"
         val EXTRA_CRIME_ID = "${CrimeFragment::class.java.canonicalName}.crime_id"
 
-        fun newInstance(crimeId: UUID?, onCrimeUpdated: (Crime) -> Unit): CrimeFragment {
+        fun newInstance(crimeId: UUID?, onCrimeUpdated: ((Crime) -> Unit) = {} ) : CrimeFragment  {
             val bundle = Bundle()
             bundle.putSerializable(ARG_CRIME_ID, crimeId)
             val fragment = CrimeFragment()
