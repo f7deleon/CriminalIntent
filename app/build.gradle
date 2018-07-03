@@ -53,9 +53,7 @@ dependencies {
     androidTestImplementation "com.android.support.test:runner:${TEST_RUNNER_VERSION}"
 
     implementation "com.android.support:appcompat-v7:${ANDROID_SUPPORT_VERSION}"
-    implementation "com.android.support:support-v4:${ANDROID_SUPPORT_VERSION}"
     implementation "com.android.support.constraint:constraint-layout:${CONSTRAIN_LAYOUT_VERSION}"
-    implementation "com.android.support:recyclerview-v7:${ANDROID_SUPPORT_VERSION}"
     implementation "com.android.support:recyclerview-v7:${ANDROID_SUPPORT_VERSION}"
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.4@aar') {
         transitive = true

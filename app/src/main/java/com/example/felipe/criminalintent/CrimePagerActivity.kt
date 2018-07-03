@@ -9,7 +9,6 @@ import android.content.Intent
 import android.view.KeyEvent
 import java.util.UUID
 
-
 class CrimePagerActivity : AppCompatActivity() {
     companion object {
         val EXTRA_CRIME_ID = "${CrimePagerActivity::class.java.canonicalName}.crime_id"
