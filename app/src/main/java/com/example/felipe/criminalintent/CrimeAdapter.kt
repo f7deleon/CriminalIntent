@@ -1,5 +1,6 @@
 package com.example.felipe.criminalintent
 
+import android.support.annotation.MainThread
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,7 @@ class CrimeAdapter(crimes: List<Crime>, private val callback: (Crime) -> Unit) :
 
     override fun getItemCount() = crimes.size
 
+    @MainThread
     fun notifyItemChangedByID(ids: ArrayList<String>) {
         ids.asSequence().forEach {
             notifyItemChanged(crimeIDStringToIndex(it))

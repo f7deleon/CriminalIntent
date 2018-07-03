@@ -5,7 +5,10 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import java.util.UUID
 
-class CrimePageAdapter(crimes: List<Crime>, val onCrimeUpdated: (Crime) -> Unit, fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
+class CrimePageAdapter(crimes: List<Crime>,
+                       val onCrimeUpdated: (Crime) -> Unit,
+                       fragmentManager: FragmentManager)
+    : FragmentStatePagerAdapter(fragmentManager) {
     private val crimes = ArrayList<Crime>(crimes)
 
     override fun getItem(position: Int): Fragment {
@@ -13,9 +16,7 @@ class CrimePageAdapter(crimes: List<Crime>, val onCrimeUpdated: (Crime) -> Unit,
         return CrimeFragment.newInstance(crime.id, onCrimeUpdated)
     }
 
-    override fun getCount(): Int {
-        return crimes.size
-    }
+    override fun getCount(): Int = crimes.size
 
     fun getItemPosition(crime_id: UUID) = crimes.indexOfFirst { it.id == crime_id }
 }

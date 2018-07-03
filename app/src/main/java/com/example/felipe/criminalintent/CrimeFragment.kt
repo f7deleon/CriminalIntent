@@ -18,7 +18,7 @@ class CrimeFragment : Fragment() {
         const val ARG_CRIME_ID = "crime_id"
         val EXTRA_CRIME_ID = "${CrimeFragment::class.java.canonicalName}.crime_id"
 
-        fun newInstance(crimeId: UUID, onCrimeUpdated: (Crime) -> Unit): CrimeFragment {
+        fun newInstance(crimeId: UUID?, onCrimeUpdated: (Crime) -> Unit): CrimeFragment {
             val bundle = Bundle()
             bundle.putSerializable(ARG_CRIME_ID, crimeId)
             val fragment = CrimeFragment()
@@ -52,15 +52,15 @@ class CrimeFragment : Fragment() {
             btnCrime.text = crime?.date.toString()
             chkSolved.setOnCheckedChangeListener { _, isChecked ->
                 crime?.isSolved = isChecked
-                onCrimeUpdated.invoke(crime ?: Crime())
+                crime?.let { onCrimeUpdated.invoke(it) }
             }
             chkPoliceRequired.setOnCheckedChangeListener { _, isChecked ->
                 crime?.isPoliceRequire = isChecked
-                onCrimeUpdated.invoke(crime ?: Crime())
+                crime?.let { onCrimeUpdated.invoke(it) }
             }
             titleEditText.afterTextChangeListener {
                 crime?.title = it.toString()
-                onCrimeUpdated.invoke(crime ?: Crime())
+                crime?.let { onCrimeUpdated.invoke(it) }
             }
         }
     }

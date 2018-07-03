@@ -35,7 +35,7 @@ class CrimeListFragment : Fragment() {
             view?.recycleViewCrimes?.layoutManager = LinearLayoutManager(activity)
             val crimeController = CrimeController.getInstance()
             adapter = CrimeAdapter(crimeController.listCrimes()) {
-                val intent = CrimePagerActivity.newIntent(activity as Context, it.id)
+                val intent = CrimePagerActivity.newIntent(context, it.id)
                 startActivityForResult(intent, EDIT_CRIME_REQUEST_CODE)
             }
             view?.recycleViewCrimes?.adapter = adapter
