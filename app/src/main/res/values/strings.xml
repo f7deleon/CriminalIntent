@@ -5,4 +5,6 @@
     <string name="detail">Details</string>
     <string name="solved">Solved</string>
     <string name="police_required">Police required</string>
+    <string name="first">First</string>
+    <string name="last">Last</string>
 </resources>

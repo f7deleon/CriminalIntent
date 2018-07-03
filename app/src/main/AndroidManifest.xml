@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme"
         >
 
-        <activity android:name=".CrimeActivity" />
+        <activity android:name=".CrimePagerActivity" />
 
         <activity android:name=".CrimeListActivity">
 
