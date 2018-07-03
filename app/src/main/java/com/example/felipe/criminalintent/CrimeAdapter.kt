@@ -29,7 +29,7 @@ class CrimeAdapter(crimes: List<Crime>, private val callback: (Crime) -> Unit) :
         }
     }
 
-    fun crimeIDStringToIndex(str :String): Int =crimes.indexOfFirst{ it.id == UUID.fromString(str)}
+    fun crimeIDStringToIndex(str :String): Int = crimes.indexOfFirst{ it.id == UUID.fromString(str)}
 }
 
 class CrimeHolder(inflater: LayoutInflater, parent: ViewGroup, layout: Int, private val callback: (Crime) -> Unit) :
